@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>福地寻宝 · 南昌文化探秘</title>
+    <style>
+        :root {
+            --red: #c41e3a;
+            --gold: #d4a574;
+            --gold-light: #f0d78c;
+            --dark: #2c1810;
+            --cream: #fdf5e6;
+            --bg: #fef9f3;
+            --card: #fffef9;
+            --text: #3d2c1e;
+            --text-light: #6b5d4f;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.14);
+            --radius: 18px;
+            --radius-sm: 10px;
+            --font-title: 'STSong', 'Songti SC', 'Noto Serif SC', 'SimSun', 'KaiTi', serif;
+            --font-body: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 880px;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+            border-radius: 0;
+        }
+
+        @media (min-width: 421px) {
+            .phone-frame {
+                border-radius: 28px;
+                height: 92vh;
+                max-height: 860px;
+            }
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 20px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(18px);
+            transition: opacity var(--transition), transform var(--transition);
+            will-change: opacity, transform;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            z-index: 1;
+        }
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            z-index: 10;
+        }
+        .screen.exit-up {
+            opacity: 0;
+            transform: translateY(-30px);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* ========== 封面页 ========== */
+        .screen-cover {
+            background: linear-gradient(180deg, #1a0a04 0%, #3d1206 25%, #8b1a1a 55%, #b5232a 75%, #c41e3a 100%);
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+        .cover-emblems {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .cover-emblem {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            animation: floatEmblem 3s ease-in-out infinite;
+        }
+        .cover-emblem:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .cover-emblem:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        .cover-emblem:nth-child(3) {
+            animation-delay: 1.2s;
+        }
+        .cover-emblem:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        .cover-emblem:nth-child(5) {
+            animation-delay: 0.9s;
+        }
+        @keyframes floatEmblem {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .cover-title-wrap {
+            margin: 8px 0;
+        }
+        .cover-subtitle {
+            font-family: var(--font-title);
+            color: var(--gold-light);
+            font-size: 15px;
+            letter-spacing: 6px;
+            margin-bottom: 6px;
+            opacity: 0.85;
+        }
+        .cover-title {
+            font-family: var(--font-title);
+            color: #fff;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            line-height: 1.3;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+        }
+        .cover-title .highlight {
+            color: #ffda6b;
+            font-size: 42px;
+            display: inline-block;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+        @keyframes glowPulse {
+            0%,
+            100% {
+                text-shadow: 0 0 20px rgba(255, 218, 107, 0.6);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 218, 107, 1), 0 0 60px rgba(255, 180, 50, 0.7);
+            }
+        }
+        .cover-desc {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+        .cover-divider {
+            width: 50px;
+            height: 2px;
+            background: var(--gold-light);
+            margin: 16px auto;
+            border-radius: 1px;
+            opacity: 0.7;
+        }
+        .btn-start {
+            margin-top: 20px;
+            padding: 14px 48px;
+            border-radius: 50px;
+            border: 2px solid var(--gold-light);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffda6b;
+            font-size: 17px;
+            font-family: var(--font-title);
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all var(--transition);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .btn-start:active {
+            background: rgba(255, 218, 107, 0.2);
+            transform: scale(0.95);
+            box-shadow: 0 0 30px rgba(255, 200, 80, 0.5);
+        }
+        .cover-footer {
+            position: absolute;
+            bottom: 28px;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        /* ========== 地图页 ========== */
+        .screen-map {
+            background: var(--cream);
+            justify-content: flex-start;
+            padding-top: 30px;
+            gap: 10px;
+        }
+        .map-header {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .map-header h2 {
+            font-family: var(--font-title);
+            color: var(--red);
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        .map-header p {
+            color: var(--text-light);
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            flex: 1;
+            min-height: 340px;
+            background: linear-gradient(180deg, #fef5e7 0%, #f8ead8 40%, #e8dcc8 70%, #d5c9b3 100%);
+            border-radius: var(--radius);
+            border: 2px dashed #d4c5a9;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .map-river {
+            position: absolute;
+            bottom: 15%;
+            left: 0;
+            width: 100%;
+            height: 18%;
+            background: linear-gradient(180deg, #b8d4e3 0%, #8ab8d0 40%, #6da8c0 100%);
+            border-radius: 0;
+            opacity: 0.7;
+        }
+        .map-river::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 0;
+            width: 100%;
+            height: 16px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(255, 255, 255, 0.35) 30px, rgba(255, 255, 255, 0.35) 32px);
+            border-radius: 50%;
+            animation: riverFlow 4s linear infinite;
+        }
+        @keyframes riverFlow {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(32px);
+            }
+        }
+        .map-label-river {
+            position: absolute;
+            bottom: 20%;
+            right: 16px;
+            font-size: 10px;
+            color: #5a8a9f;
+            letter-spacing: 1px;
+            font-family: var(--font-title);
+        }
+        .map-marker {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform var(--transition);
+            z-index: 5;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .map-marker:active {
+            transform: scale(1.15);
+        }
+        .map-marker-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition);
+            position: relative;
+        }
+        .map-marker-icon.pulse-ring::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            animation: pulseRing 2s ease-out infinite;
+        }
+        @keyframes pulseRing {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+        .map-marker-label {
+            font-size: 11px;
+            color: var(--dark);
+            margin-top: 4px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+        .marker-tw {
+            top: 16%;
+            left: 28%;
+        }
+        .marker-tw .map-marker-icon {
+            background: #e85d3a;
+            color: #fff;
+        }
+        .marker-sjt {
+            top: 38%;
+            left: 55%;
+        }
+        .marker-sjt .map-marker-icon {
+            background: #c4945a;
+            color: #fff;
+        }
+        .marker-by {
+            top: 55%;
+            left: 20%;
+        }
+        .marker-by .map-marker-icon {
+            background: #c41e3a;
+            color: #fff;
+        }
+        .marker-ms {
+            top: 20%;
+            left: 68%;
+        }
+        .marker-ms .map-marker-icon {
+            background: #f5a623;
+            color: #fff;
+        }
+        .marker-star {
+            top: 60%;
+            left: 70%;
+        }
+        .marker-star .map-marker-icon {
+            background: #4a90d9;
+            color: #fff;
+        }
+        .map-btn-explore {
+            margin-top: 8px;
+            padding: 12px 36px;
+            border-radius: 50px;
+            border: none;
+            background: var(--red);
+            color: #fff;
+            font-size: 15px;
+            font-family: var(--font-title);
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+        }
+        .map-btn-explore:active {
+            background: #a0182e;
+            transform: scale(0.94);
+        }
+
+        /* ========== 通用内容页 ========== */
+        .screen-content {
+            background: var(--bg);
+            justify-content: flex-start;
+            padding-top: 20px;
+            gap: 12px;
+        }
+        .content-header {
+            text-align: center;
+            width: 100%;
+        }
+        .content-header .icon-large {
+            font-size: 44px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .content-header h3 {
+            font-family: var(--font-title);
+            color: var(--dark);
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+        .content-header .sub {
+            color: var(--text-light);
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+        .content-body {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ========== 滕王阁寻宝游戏 ========== */
+        .game-scene {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(180deg, #ff9a56 0%, #ffb07c 20%, #ffcba4 40%, #fde0c8 55%, #c8dce8 70%, #8ab8d0 100%);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            cursor: default;
+        }
+        .scene-sun {
+            position: absolute;
+            top: 12%;
+            right: 15%;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffe7b0 20%, #ffb84d 60%, #e8872b 100%);
+            box-shadow: 0 0 50px rgba(255, 160, 60, 0.7), 0 0 100px rgba(255, 140, 40, 0.4);
+            z-index: 1;
+            animation: sunGlow 3s ease-in-out infinite;
+        }
+        @keyframes sunGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 50px rgba(255, 160, 60, 0.7), 0 0 100px rgba(255, 140, 40, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 70px rgba(255, 180, 70, 0.9), 0 0 130px rgba(255, 150, 50, 0.55);
+            }
+        }
+        .scene-pavilion {
+            position: absolute;
+            bottom: 28%;
+            left: 15%;
+            width: 55%;
+            height: 50%;
+            z-index: 3;
+        }
+        .pavilion-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(180deg, #c44d34 0%, #a03a28 30%, #7d2a1a 100%);
+            border-radius: 4px 4px 0 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        .pavilion-roof {
+            position: absolute;
+            bottom: 63%;
+            left: -12%;
+            width: 124%;
+            height: 30%;
+            background: #6b1d12;
+            clip-path: polygon(50% 0%, 0% 100%, 8% 92%, 20% 100%, 35% 88%, 50% 98%, 65% 88%, 80% 100%, 92% 92%, 100% 100%);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .pavilion-window {
+            position: absolute;
+            width: 16px;
+            height: 18px;
+            background: #fde8c8;
+            border-radius: 2px;
+            border: 2px solid #5a1a0e;
+            z-index: 4;
+        }
+        .pavilion-window.w1 {
+            bottom: 35%;
+            left: 22%;
+        }
+        .pavilion-window.w2 {
+            bottom: 35%;
+            right: 22%;
+        }
+        .pavilion-window.w3 {
+            bottom: 12%;
+            left: 35%;
+        }
+        .scene-ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 28%;
+            background: linear-gradient(180deg, #c8b89a 0%, #a89878 40%, #7d6d55 100%);
+            border-radius: 0;
+            z-index: 2;
+        }
+        .scene-water {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 22%;
+            background: linear-gradient(180deg, rgba(120, 170, 195, 0.75) 0%, rgba(90, 145, 175, 0.85) 100%);
+            z-index: 1;
+            border-radius: 0;
+        }
+        .scene-water::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(255, 255, 255, 0.2) 8px, rgba(255, 255, 255, 0.2) 10px);
+            animation: waterRipple 3s linear infinite;
+        }
+        @keyframes waterRipple {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        .hidden-treasure {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+            animation: treasureHint 2.5s ease-in-out infinite;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hidden-treasure.found {
+            animation: treasureFound 0.6s ease-out forwards;
+            pointer-events: none;
+            font-size: 28px;
+        }
+        @keyframes treasureHint {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.55;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.9;
+            }
+        }
+        @keyframes treasureFound {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+        .treasure-1 {
+            top: 22%;
+            left: 38%;
+        }
+        .treasure-2 {
+            bottom: 32%;
+            right: 18%;
+        }
+        .treasure-3 {
+            top: 48%;
+            left: 62%;
+        }
+        .game-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-title);
+            color: var(--dark);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        .game-progress .dots {
+            display: flex;
+            gap: 5px;
+        }
+        .game-progress .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all var(--transition);
+        }
+        .game-progress .dot.collected {
+            background: #f5a623;
+            box-shadow: 0 0 10px rgba(245, 166, 35, 0.6);
+            animation: dotPop 0.4s ease-out;
+        }
+        @keyframes dotPop {
+            0% {
+                transform: scale(0.3);
+            }
+            60% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .game-hint {
+            font-size: 12px;
+            color: #8b6f5e;
+            letter-spacing: 1px;
+            text-align: center;
+            min-height: 18px;
+            transition: all 0.3s;
+        }
+
+        /* ========== 选择题样式 ========== */
+        .quiz-container {
+            width: 100%;
+            background: #fffef9;
+            border-radius: var(--radius);
+            padding: 16px 14px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            border: 2px solid #e8dcc8;
+            transition: all var(--transition);
+            display: none;
+        }
+        .quiz-container.visible {
+            display: block;
+            animation: quizSlideIn 0.5s ease-out;
+        }
+        @keyframes quizSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .quiz-container.correct-flash {
+            border-color: #4caf50 !important;
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.4) !important;
+            transition: all 0.4s;
+        }
+        .quiz-container.wrong-flash {
+            border-color: #e53935 !important;
+            box-shadow: 0 0 30px rgba(229, 57, 53, 0.4) !important;
+            transition: all 0.4s;
+            animation: shakeX 0.5s ease-out;
+        }
+        @keyframes shakeX {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-8px);
+            }
+            40% {
+                transform: translateX(8px);
+            }
+            60% {
+                transform: translateX(-6px);
+            }
+            80% {
+                transform: translateX(4px);
+            }
+        }
+        .quiz-question {
+            font-family: var(--font-title);
+            color: var(--dark);
+            font-size: 15px;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .quiz-question .quiz-icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .quiz-option {
+            padding: 11px 18px;
+            border-radius: 12px;
+            border: 2px solid #e0d5c5;
+            background: #fffef9;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: var(--font-body);
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            text-align: center;
+            color: var(--text);
+            position: relative;
+        }
+        .quiz-option:active {
+            transform: scale(0.96);
+            background: #fdf5e6;
+        }
+        .quiz-option.selected-correct {
+            border-color: #4caf50 !important;
+            background: #e8f5e9 !important;
+            color: #2e7d32 !important;
+            pointer-events: none;
+            font-weight: 600;
+            animation: optionPop 0.4s ease-out;
+        }
+        .quiz-option.selected-wrong {
+            border-color: #e53935 !important;
+            background: #ffebee !important;
+            color: #c62828 !important;
+            pointer-events: none;
+            animation: shakeX 0.5s ease-out;
+        }
+        .quiz-option.reveal-correct {
+            border-color: #4caf50 !important;
+            background: #e8f5e9 !important;
+            color: #2e7d32 !important;
+            pointer-events: none;
+            font-weight: 600;
+            animation: optionPop 0.5s ease-out 0.3s forwards;
+            opacity: 0.7;
+        }
+        @keyframes optionPop {
+            0% {
+                transform: scale(0.9);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .quiz-feedback {
+            font-family: var(--font-title);
+            font-size: 13px;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            min-height: 18px;
+            transition: all 0.3s;
+        }
+        .quiz-feedback.success {
+            color: #2e7d32;
+        }
+        .quiz-feedback.error {
+            color: #c62828;
+        }
+
+        /* ========== 绳金塔页 ========== */
+        .pagoda-scene {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(180deg, #e8f0f8 0%, #d0dde8 50%, #bcc8d4 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .pagoda {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.15s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pagoda-tier {
+            background: #b8945c;
+            border-radius: 4px 4px 0 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .pagoda-tier.t1 {
+            width: 70px;
+            height: 28px;
+            border-radius: 6px 6px 0 0;
+        }
+        .pagoda-tier.t2 {
+            width: 60px;
+            height: 26px;
+        }
+        .pagoda-tier.t3 {
+            width: 52px;
+            height: 24px;
+        }
+        .pagoda-tier.t4 {
+            width: 44px;
+            height: 22px;
+        }
+        .pagoda-tier.t5 {
+            width: 36px;
+            height: 20px;
+            border-radius: 0 0 4px 4px;
+        }
+        .pagoda-spire {
+            width: 4px;
+            height: 30px;
+            background: #d4a574;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(212, 165, 116, 0.6);
+        }
+        .pagoda-btn {
+            margin-top: 8px;
+            padding: 10px 28px;
+            border-radius: 50px;
+            border: 2px solid #b8945c;
+            background: #fff;
+            color: #6b4d30;
+            font-family: var(--font-title);
+            font-size: 15px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: var(--shadow);
+        }
+        .pagoda-btn:active {
+            background: #fdf3e4;
+            transform: scale(0.94);
+        }
+        .pagoda-result {
+            text-align: center;
+            font-family: var(--font-title);
+            color: #6b4d30;
+            font-size: 15px;
+            letter-spacing: 1px;
+            min-height: 22px;
+            transition: all 0.3s;
+        }
+
+        /* ========== 八一广场页 ========== */
+        .square-scene {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(180deg, #d4e5f7 0%, #c0d5ea 60%, #a8bfd6 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            box-shadow: var(--shadow-lg);
+            flex-wrap: wrap;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .star-collectible {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            animation: starFloat 2s ease-in-out infinite;
+            -webkit-tap-highlight-color: transparent;
+            filter: drop-shadow(0 3px 6px rgba(200, 30, 30, 0.35));
+        }
+        .star-collectible:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .star-collectible:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        .star-collectible:nth-child(3) {
+            animation-delay: 1s;
+        }
+        .star-collectible:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        .star-collectible:nth-child(5) {
+            animation-delay: 0.7s;
+        }
+        @keyframes starFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-14px) rotate(8deg);
+            }
+        }
+        .star-collectible.collected {
+            animation: starPop 0.5s ease-out forwards;
+            pointer-events: none;
+            filter: drop-shadow(0 0 16px rgba(255, 200, 40, 0.9));
+        }
+        @keyframes starPop {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.6);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2.2);
+                opacity: 0;
+            }
+        }
+        .square-counter {
+            font-family: var(--font-title);
+            color: #c41e3a;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        /* ========== 美食页 ========== */
+        .food-scene {
+            width: 100%;
+            background: #fffef9;
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        .food-bowl {
+            font-size: 60px;
+            margin: 8px 0;
+            transition: all 0.3s;
+        }
+        .food-toppings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .topping-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid #e0d5c5;
+            background: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .topping-btn:active {
+            background: #fdf3e4;
+            border-color: #d4a574;
+            transform: scale(0.93);
+        }
+        .topping-btn.added {
+            background: #fdf0e0;
+            border-color: #d4a574;
+            color: #6b4d30;
+            pointer-events: none;
+            animation: btnPop 0.4s ease-out;
+        }
+        @keyframes btnPop {
+            0% {
+                transform: scale(0.8);
+            }
+            60% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .food-result {
+            font-family: var(--font-title);
+            color: #6b4d30;
+            font-size: 14px;
+            letter-spacing: 1px;
+            min-height: 20px;
+        }
+
+        /* ========== 南昌之星页 ========== */
+        .ferris-scene {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(180deg, #1a2a40 0%, #1e3550 40%, #2a4a6b 70%, #3a5a7b 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+        .ferris-stars-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .ferris-stars-bg .star-dot {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        .ferris-wheel {
+            width: 160px;
+            height: 160px;
+            border: 5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            animation: wheelSpin 20s linear infinite;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 0 40px rgba(100, 180, 255, 0.25);
+            transition: box-shadow 0.5s;
+        }
+        @keyframes wheelSpin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .ferris-wheel.paused {
+            animation-play-state: paused;
+        }
+        .ferris-spoke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 48%;
+            background: rgba(255, 255, 255, 0.3);
+            transform-origin: bottom center;
+            border-radius: 1px;
+        }
+        .ferris-cabin {
+            position: absolute;
+            width: 18px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+        }
+        .ferris-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        .ferris-tap-hint {
+            position: absolute;
+            bottom: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            letter-spacing: 2px;
+            z-index: 5;
+            animation: fadeHint 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes fadeHint {
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* ========== 宝藏汇总页 ========== */
+        .screen-treasure {
+            background: linear-gradient(180deg, #1a0804 0%, #3d1206 20%, #5a1a0e 50%, #3d1206 100%);
+            justify-content: flex-start;
+            padding-top: 30px;
+            gap: 12px;
+            text-align: center;
+        }
+        .treasure-final-title {
+            font-family: var(--font-title);
+            color: #ffda6b;
+            font-size: 26px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 218, 107, 0.5);
+        }
+        .treasure-chest {
+            font-size: 70px;
+            animation: chestBounce 1s ease-out;
+        }
+        @keyframes chestBounce {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.15);
+            }
+            80% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .treasure-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 6px 0;
+        }
+        .treasure-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 218, 107, 0.4);
+            border-radius: 20px;
+            padding: 8px 14px;
+            color: #ffda6b;
+            font-size: 13px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: itemFadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        .treasure-item:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+        .treasure-item:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+        .treasure-item:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        .treasure-item:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+        .treasure-item:nth-child(5) {
+            animation-delay: 1s;
+        }
+        .treasure-item:nth-child(6) {
+            animation-delay: 1.2s;
+        }
+        .treasure-item:nth-child(7) {
+            animation-delay: 1.4s;
+        }
+        @keyframes itemFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .treasure-badge {
+            font-family: var(--font-title);
+            color: #ffda6b;
+            font-size: 20px;
+            letter-spacing: 3px;
+            padding: 12px 28px;
+            border: 2px solid #ffda6b;
+            border-radius: 50px;
+            background: rgba(255, 218, 107, 0.08);
+            animation: badgeGlow 2s ease-in-out infinite;
+        }
+        @keyframes badgeGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(255, 218, 107, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(255, 218, 107, 0.7);
+            }
+        }
+
+        /* ========== 导航按钮 ========== */
+        .nav-btn {
+            padding: 11px 32px;
+            border-radius: 50px;
+            border: none;
+            background: var(--red);
+            color: #fff;
+            font-size: 14px;
+            font-family: var(--font-title);
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+            -webkit-tap-highlight-color: transparent;
+            white-space: nowrap;
+        }
+        .nav-btn:active {
+            transform: scale(0.93);
+            background: #a0182e;
+        }
+        .nav-btn.secondary {
+            background: #fff;
+            color: var(--red);
+            border: 2px solid var(--red);
+        }
+        .nav-btn.secondary:active {
+            background: #fef0f0;
+        }
+        .nav-btn.golden {
+            background: #d4a574;
+            color: #fff;
+        }
+        .nav-btn.golden:active {
+            background: #b8845a;
+        }
+        .nav-btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        /* 页面指示器 */
+        .page-indicator {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .page-indicator .ind-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ccc;
+            transition: all var(--transition);
+        }
+        .page-indicator .ind-dot.active {
+            background: var(--red);
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 24px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 30;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .toast.success {
+            background: rgba(180, 120, 40, 0.9);
+            color: #ffda6b;
+        }
+
+        /* 响应式微调 */
+        @media (max-width: 380px) {
+            .cover-title {
+                font-size: 28px;
+            }
+            .cover-title .highlight {
+                font-size: 34px;
+            }
+            .game-scene {
+                height: 230px;
+            }
+            .map-marker-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 18px;
+            }
+            .map-marker-label {
+                font-size: 10px;
+            }
+            .quiz-question {
+                font-size: 13px;
+            }
+            .quiz-option {
+                font-size: 12px;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame" id="app">
+        <!-- ==================== 第1页：封面 ==================== -->
+        <div class="screen screen-cover active" data-page="0" id="screen-cover">
+            <div class="cover-emblems">
+                <span class="cover-emblem">🏯</span>
+                <span class="cover-emblem">⭐</span>
+                <span class="cover-emblem">🍜</span>
+                <span class="cover-emblem">🗼</span>
+                <span class="cover-emblem">🎡</span>
+            </div>
+            <div class="cover-title-wrap">
+                <p class="cover-subtitle">南 昌 文 化 探 秘</p>
+                <h1 class="cover-title">福地寻宝<span class="highlight">·</span><br>南昌</h1>
+            </div>
+            <div class="cover-divider"></div>
+            <p class="cover-desc">探寻洪都古韵 · 发现赣鄱之美</p>
+            <button class="btn-start" onclick="goToPage(1)">✨ 开始寻宝</button>
+            <div class="cover-footer">落霞与孤鹜齐飞 · 秋水共长天一色</div>
+        </div>
+
+        <!-- ==================== 第2页：寻宝地图 ==================== -->
+        <div class="screen screen-map" data-page="1" id="screen-map">
+            <div class="map-header">
+                <h2>🗺️ 南昌寻宝图</h2>
+                <p>点击地标 · 开启文化探秘之旅</p>
+            </div>
+            <div class="map-container" id="mapContainer">
+                <div class="map-river"></div>
+                <span class="map-label-river">赣 江</span>
+                <div class="map-marker marker-tw" onclick="goToPage(2)" id="marker-tw">
+                    <div class="map-marker-icon pulse-ring">🏯</div>
+                    <span class="map-marker-label">滕王阁</span>
+                </div>
+                <div class="map-marker marker-sjt" onclick="goToPage(3)" id="marker-sjt">
+                    <div class="map-marker-icon">🗼</div>
+                    <span class="map-marker-label">绳金塔</span>
+                </div>
+                <div class="map-marker marker-by" onclick="goToPage(4)" id="marker-by">
+                    <div class="map-marker-icon pulse-ring">🏛️</div>
+                    <span class="map-marker-label">八一广场</span>
+                </div>
+                <div class="map-marker marker-ms" onclick="goToPage(5)" id="marker-ms">
+                    <div class="map-marker-icon">🍜</div>
+                    <span class="map-marker-label">南昌美食</span>
+                </div>
+                <div class="map-marker marker-star" onclick="goToPage(6)" id="marker-star">
+                    <div class="map-marker-icon">🎡</div>
+                    <span class="map-marker-label">南昌之星</span>
+                </div>
+            </div>
+            <button class="map-btn-explore" onclick="goToPage(2)">📍 从滕王阁开始探索</button>
+        </div>
+
+        <!-- ==================== 第3页：滕王阁寻宝小游戏 + 选择题 ==================== -->
+        <div class="screen screen-content" data-page="2" id="screen-tw">
+            <div class="content-header">
+                <span class="icon-large">🏯</span>
+                <h3>滕王阁 · 寻宝</h3>
+                <p class="sub">在画面中找到3个隐藏的金元宝</p>
+            </div>
+            <div class="content-body">
+                <div class="game-scene" id="gameSceneTW">
+                    <div class="scene-sun"></div>
+                    <div class="scene-pavilion">
+                        <div class="pavilion-roof"></div>
+                        <div class="pavilion-body"></div>
+                        <div class="pavilion-window w1"></div>
+                        <div class="pavilion-window w2"></div>
+                        <div class="pavilion-window w3"></div>
+                    </div>
+                    <div class="scene-ground"></div>
+                    <div class="scene-water"></div>
+                    <div class="hidden-treasure treasure-1" data-treasure="1" onclick="findTreasure(this)">🪙</div>
+                    <div class="hidden-treasure treasure-2" data-treasure="2" onclick="findTreasure(this)">🪙</div>
+                    <div class="hidden-treasure treasure-3" data-treasure="3" onclick="findTreasure(this)">🪙</div>
+                </div>
+                <div class="game-progress">
+                    <span>宝物收集：</span>
+                    <div class="dots">
+                        <span class="dot" id="twDot1"></span>
+                        <span class="dot" id="twDot2"></span>
+                        <span class="dot" id="twDot3"></span>
+                    </div>
+                    <span id="twCount">0/3</span>
+                </div>
+                <p class="game-hint" id="twHint">👆 在滕王阁画面中仔细寻找闪烁的宝物吧~</p>
+
+                <!-- 选择题区域（寻宝完成后显示） -->
+                <div class="quiz-container" id="twQuiz">
+                    <div class="quiz-question">
+                        <span class="quiz-icon">📜</span>
+                        <span>文化问答：「落霞与孤鹜齐飞，秋水共长天一色」出自哪位唐代诗人的名篇？</span>
+                    </div>
+                    <div class="quiz-options" id="twQuizOptions">
+                        <button class="quiz-option" data-answer="A" onclick="answerQuiz(this, 'A')">A. 王勃</button>
+                        <button class="quiz-option" data-answer="B" onclick="answerQuiz(this, 'B')">B. 李白</button>
+                        <button class="quiz-option" data-answer="C" onclick="answerQuiz(this, 'C')">C. 杜甫</button>
+                    </div>
+                    <p class="quiz-feedback" id="twQuizFeedback"></p>
+                </div>
+
+                <button class="nav-btn" id="twNextBtn" style="display:none;" onclick="goToPage(3)">前往绳金塔 →</button>
+            </div>
+        </div>
+
+        <!-- ==================== 第4页：绳金塔 ==================== -->
+        <div class="screen screen-content" data-page="3" id="screen-sjt">
+            <div class="content-header">
+                <span class="icon-large">🗼</span>
+                <h3>绳金塔 · 祈福</h3>
+                <p class="sub">千年古塔 · 点击祈福获取好运签</p>
+            </div>
+            <div class="content-body">
+                <div class="pagoda-scene">
+                    <div class="pagoda" id="pagodaEl" onclick="shakePagoda()">
+                        <div class="pagoda-spire"></div>
+                        <div class="pagoda-tier t1"></div>
+                        <div class="pagoda-tier t2"></div>
+                        <div class="pagoda-tier t3"></div>
+                        <div class="pagoda-tier t4"></div>
+                        <div class="pagoda-tier t5"></div>
+                    </div>
+                </div>
+                <p class="pagoda-result" id="pagodaResult">👆 轻点古塔，诚心祈福</p>
+                <button class="nav-btn" id="sjtNextBtn" style="display:none;" onclick="goToPage(4)">前往八一广场 →</button>
+            </div>
+        </div>
+
+        <!-- ==================== 第5页：八一广场 ==================== -->
+        <div class="screen screen-content" data-page="4" id="screen-by">
+            <div class="content-header">
+                <span class="icon-large">🏛️</span>
+                <h3>八一广场 · 追忆</h3>
+                <p class="sub">收集红色星光 · 铭记英雄城</p>
+            </div>
+            <div class="content-body">
+                <div class="square-scene" id="squareScene">
+                    <span class="star-collectible" onclick="collectStar(this)">⭐</span>
+                    <span class="star-collectible" onclick="collectStar(this)">⭐</span>
+                    <span class="star-collectible" onclick="collectStar(this)">⭐</span>
+                    <span class="star-collectible" onclick="collectStar(this)">⭐</span>
+                    <span class="star-collectible" onclick="collectStar(this)">⭐</span>
+                </div>
+                <p class="square-counter" id="starCounter">收集星光：0 / 5</p>
+                <button class="nav-btn" id="byNextBtn" style="display:none;" onclick="goToPage(5)">去品尝美食 →</button>
+            </div>
+        </div>
+
+        <!-- ==================== 第6页：南昌美食 ==================== -->
+        <div class="screen screen-content" data-page="5" id="screen-food">
+            <div class="content-header">
+                <span class="icon-large">🍜</span>
+                <h3>南昌美食 · 拌粉</h3>
+                <p class="sub">添加配料 · 完成一碗地道南昌拌粉</p>
+            </div>
+            <div class="content-body">
+                <div class="food-scene">
+                    <div class="food-bowl" id="foodBowl">🍜</div>
+                    <div class="food-toppings" id="toppingsContainer">
+                        <button class="topping-btn" data-topping="花生" onclick="addTopping(this)">🥜 花生</button>
+                        <button class="topping-btn" data-topping="葱花" onclick="addTopping(this)">🌿 葱花</button>
+                        <button class="topping-btn" data-topping="辣椒" onclick="addTopping(this)">🌶️ 辣椒</button>
+                        <button class="topping-btn" data-topping="萝卜干" onclick="addTopping(this)">🥕 萝卜干</button>
+                        <button class="topping-btn" data-topping="香油" onclick="addTopping(this)">🫒 香油</button>
+                    </div>
+                    <p class="food-result" id="foodResult">👆 点击配料，调制你的拌粉</p>
+                </div>
+                <button class="nav-btn" id="foodNextBtn" style="display:none;" onclick="goToPage(6)">前往南昌之星 →</button>
+            </div>
+        </div>
+
+        <!-- ==================== 第7页：南昌之星摩天轮 ==================== -->
+        <div class="screen screen-content" data-page="6" id="screen-star">
+            <div class="content-header">
+                <span class="icon-large">🎡</span>
+                <h3>南昌之星 · 点亮</h3>
+                <p class="sub">点击摩天轮 · 收集璀璨星光</p>
+            </div>
+            <div class="content-body">
+                <div class="ferris-scene" id="ferrisScene" onclick="collectFerrisLight()">
+                    <div class="ferris-stars-bg" id="ferrisStarsBg"></div>
+                    <div class="ferris-wheel" id="ferrisWheel">
+                        <div class="ferris-center"></div>
+                    </div>
+                    <p class="ferris-tap-hint" id="ferrisHint">👆 点击摩天轮收集星光</p>
+                </div>
+                <p id="ferrisCounter" style="font-family:var(--font-title);color:#4a90d9;letter-spacing:1px;">星光能量：0 / 6</p>
+                <button class="nav-btn golden" id="starNextBtn" style="display:none;" onclick="goToPage(7)">🌟 查看宝藏</button>
+            </div>
+        </div>
+
+        <!-- ==================== 第8页：宝藏揭晓 ==================== -->
+        <div class="screen screen-treasure" data-page="7" id="screen-final">
+            <div class="treasure-chest">🎁</div>
+            <h2 class="treasure-final-title">✨ 宝藏揭晓 ✨</h2>
+            <div class="treasure-list" id="finalTreasureList"></div>
+            <div class="treasure-badge" id="finalBadge">🏅 南昌文化达人</div>
+            <p style="color:rgba(255,255,255,0.6);font-size:12px;letter-spacing:2px;margin-top:4px;">福地南昌 · 人杰地灵</p>
+            <button class="nav-btn golden" style="margin-top:8px;" onclick="restartJourney()">🔄 再次探秘</button>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+
+        <!-- 页面指示器 -->
+        <div class="page-indicator" id="pageIndicator">
+            <span class="ind-dot active"></span>
+            <span class="ind-dot"></span>
+            <span class="ind-dot"></span>
+            <span class="ind-dot"></span>
+            <span class="ind-dot"></span>
+            <span class="ind-dot"></span>
+            <span class="ind-dot"></span>
+            <span class="ind-dot"></span>
+        </div>
+    </div>
+
+    <script>
+        // ============ 全局状态 ============
+        const state = {
+            currentPage: 0,
+            totalPages: 8,
+            isTransitioning: false, // 页面切换锁
+            // 滕王阁寻宝
+            twTreasuresFound: 0,
+            twTreasuresTotal: 3,
+            twCompleted: false,
+            twQuizAnswered: false,
+            twQuizCorrect: false,
+            // 绳金塔
+            sjtShaken: false,
+            // 八一广场
+            starsCollected: 0,
+            starsTotal: 5,
+            byCompleted: false,
+            // 美食
+            toppingsAdded: 0,
+            toppingsTotal: 5,
+            foodCompleted: false,
+            // 南昌之星
+            ferrisLights: 0,
+            ferrisTotal: 6,
+            ferrisCompleted: false,
+            // 收集的所有宝物
+            allTreasures: [],
+            // 绳金塔抖动定时器
+            pagodaShakeTimer: null,
+        };
+
+        // ============ 页面切换（带锁） ============
+        function goToPage(pageIndex) {
+            if (state.isTransitioning) return;
+            if (pageIndex === state.currentPage) return;
+            if (pageIndex < 0 || pageIndex >= state.totalPages) return;
+
+            state.isTransitioning = true;
+
+            const oldScreen = document.querySelector(`[data-page="${state.currentPage}"]`);
+            const newScreen = document.querySelector(`[data-page="${pageIndex}"]`);
+
+            // 清理旧页面的绳金塔抖动定时器
+            if (state.pagodaShakeTimer) {
+                clearInterval(state.pagodaShakeTimer);
+                state.pagodaShakeTimer = null;
+                const pagoda = document.getElementById('pagodaEl');
+                if (pagoda) pagoda.style.transform = 'translateX(0)';
+            }
+
+            if (oldScreen) {
+                oldScreen.classList.remove('active');
+                oldScreen.classList.add('exit-up');
+            }
+            if (newScreen) {
+                // 使用 requestAnimationFrame 确保过渡流畅
+                requestAnimationFrame(() => {
+                    newScreen.classList.add('active');
+                    newScreen.scrollTop = 0;
+                });
+            }
+
+            state.currentPage = pageIndex;
+            updatePageIndicator();
+            onPageEnter(pageIndex);
+
+            // 过渡锁在动画结束后释放（与CSS transition时长匹配）
+            setTimeout(() => {
+                if (oldScreen) oldScreen.classList.remove('exit-up');
+                state.isTransitioning = false;
+            }, 400);
+        }
+
+        function updatePageIndicator() {
+            const dots = document.querySelectorAll('#pageIndicator .ind-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === state.currentPage);
+            });
+        }
+
+        function onPageEnter(pageIndex) {
+            if (pageIndex === 2) {
+                // 进入滕王阁页面，检查状态
+                refreshTengwangPage();
+            }
+            if (pageIndex === 6) {
+                initFerrisStars();
+            }
+            if (pageIndex === 7) {
+                buildFinalTreasureList();
+            }
+        }
+
+        // ============ Toast ============
+        let toastTimeout = null;
+
+        function showToast(msg, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = 'toast ' + type + ' show';
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+                toastTimeout = null;
+            }, 1600);
+        }
+
+        // ============ 刷新滕王阁页面状态 ============
+        function refreshTengwangPage() {
+            // 恢复宝物进度
+            document.getElementById('twCount').textContent = state.twTreasuresFound + '/3';
+            for (let i = 1; i <= 3; i++) {
+                const dotEl = document.getElementById('twDot' + i);
+                if (dotEl) {
+                    if (i <= state.twTreasuresFound) {
+                        dotEl.classList.add('collected');
+                    } else {
+                        dotEl.classList.remove('collected');
+                    }
+                }
+            }
+            // 恢复宝物元素状态
+            document.querySelectorAll('#gameSceneTW .hidden-treasure').forEach((el, idx) => {
+                if (idx < state.twTreasuresFound) {
+                    el.classList.add('found');
+                } else {
+                    el.classList.remove('found');
+                }
+            });
+
+            // 恢复选择题状态
+            const quizContainer = document.getElementById('twQuiz');
+            const quizFeedback = document.getElementById('twQuizFeedback');
+            const quizOptions = document.querySelectorAll('#twQuizOptions .quiz-option');
+            const twNextBtn = document.getElementById('twNextBtn');
+            const twHint = document.getElementById('twHint');
+
+            if (state.twCompleted) {
+                twHint.textContent = '🏆 滕王阁宝物全部找到！落霞与孤鹜齐飞~';
+                quizContainer.classList.add('visible');
+
+                if (state.twQuizAnswered) {
+                    // 已经回答过选择题
+                    quizOptions.forEach(opt => {
+                        opt.classList.remove('selected-correct', 'selected-wrong', 'reveal-correct');
+                        opt.style.pointerEvents = 'none';
+                        if (opt.dataset.answer === 'A') {
+                            opt.classList.add('selected-correct');
+                        }
+                    });
+                    if (state.twQuizCorrect) {
+                        quizFeedback.textContent = '✅ 回答正确！《滕王阁序》是王勃的千古名篇！';
+                        quizFeedback.className = 'quiz-feedback success';
+                        quizContainer.classList.add('correct-flash');
+                        quizContainer.classList.remove('wrong-flash');
+                        twNextBtn.style.display = 'inline-block';
+                    } else {
+                        // 答错过但已揭示正确答案
+                        quizFeedback.textContent = 'ℹ️ 正确答案是 A. 王勃，记住这位初唐四杰之首哦~';
+                        quizFeedback.className = 'quiz-feedback';
+                        quizContainer.classList.remove('correct-flash', 'wrong-flash');
+                        twNextBtn.style.display = 'inline-block';
+                    }
+                } else {
+                    // 选择题未回答
+                    quizOptions.forEach(opt => {
+                        opt.classList.remove('selected-correct', 'selected-wrong', 'reveal-correct');
+                        opt.style.pointerEvents = 'auto';
+                    });
+                    quizFeedback.textContent = '';
+                    quizFeedback.className = 'quiz-feedback';
+                    quizContainer.classList.remove('correct-flash', 'wrong-flash');
+                    twNextBtn.style.display = 'none';
+                }
+            } else {
+                // 宝物还没找完
+                twHint.textContent = state.twTreasuresFound === 0 ?
+                    '👆 在滕王阁画面中仔细寻找闪烁的宝物吧~' :
+                    '🎉 找到' + state.twTreasuresFound + '个宝物！继续寻找~';
+                quizContainer.classList.remove('visible', 'correct-flash', 'wrong-flash');
+                twNextBtn.style.display = 'none';
+                quizFeedback.textContent = '';
+                quizFeedback.className = 'quiz-feedback';
+                quizOptions.forEach(opt => {
+                    opt.classList.remove('selected-correct', 'selected-wrong', 'reveal-correct');
+                    opt.style.pointerEvents = 'auto';
+                });
+            }
+        }
+
+        // ============ 第3页：滕王阁寻宝游戏 ============
+        function findTreasure(el) {
+            if (el.classList.contains('found')) return;
+            if (state.twCompleted) return;
+
+            el.classList.add('found');
+            state.twTreasuresFound++;
+            state.allTreasures.push('🏯金元宝');
+
+            const dotEl = document.getElementById('twDot' + state.twTreasuresFound);
+            if (dotEl) dotEl.classList.add('collected');
+            document.getElementById('twCount').textContent = state.twTreasuresFound + '/3';
+
+            const hints = ['找到第一个宝物！继续加油~', '又找到一个！还差最后一个！', '太棒了！全部找到！'];
+            const hintIdx = Math.min(state.twTreasuresFound - 1, 2);
+            document.getElementById('twHint').textContent = '🎉 ' + hints[hintIdx];
+
+            showToast('🪙 发现金元宝！', 'success');
+
+            if (state.twTreasuresFound >= state.twTreasuresTotal) {
+                state.twCompleted = true;
+                setTimeout(() => {
+                    document.getElementById('twHint').textContent = '🏆 滕王阁宝物全部找到！落霞与孤鹜齐飞~';
+                    // 显示选择题
+                    const quizContainer = document.getElementById('twQuiz');
+                    quizContainer.classList.add('visible');
+                    quizContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    document.getElementById('twQuizFeedback').textContent = '';
+                    document.getElementById('twQuizFeedback').className = 'quiz-feedback';
+                    document.querySelectorAll('#twQuizOptions .quiz-option').forEach(opt => {
+                        opt.classList.remove('selected-correct', 'selected-wrong', 'reveal-correct');
+                        opt.style.pointerEvents = 'auto';
+                    });
+                    document.getElementById('twNextBtn').style.display = 'none';
+                }, 600);
+            }
+        }
+
+        // ============ 选择题 ============
+        function answerQuiz(btn, chosenAnswer) {
+            if (state.twQuizAnswered) return;
+            if (!state.twCompleted) return;
+
+            const correctAnswer = 'A';
+            const quizContainer = document.getElementById('twQuiz');
+            const quizFeedback = document.getElementById('twQuizFeedback');
+            const allOptions = document.querySelectorAll('#twQuizOptions .quiz-option');
+
+            state.twQuizAnswered = true;
+            state.twQuizCorrect = (chosenAnswer === correctAnswer);
+
+            // 禁用所有选项
+            allOptions.forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (chosenAnswer === correctAnswer) {
+                // 答对
+                btn.classList.add('selected-correct');
+                quizFeedback.textContent = '✅ 回答正确！《滕王阁序》是王勃的千古名篇！';
+                quizFeedback.className = 'quiz-feedback success';
+                quizContainer.classList.add('correct-flash');
+                quizContainer.classList.remove('wrong-flash');
+                state.allTreasures.push('📜文化知识宝藏');
+                showToast('📜 答对了！获得知识宝藏！', 'success');
+                // 显示下一步按钮
+                setTimeout(() => {
+                    document.getElementById('twNextBtn').style.display = 'inline-block';
+                    document.getElementById('twNextBtn').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            } else {
+                // 答错
+                btn.classList.add('selected-wrong');
+                quizFeedback.textContent = '❌ 不对哦，再想想看…正确答案已标出';
+                quizFeedback.className = 'quiz-feedback error';
+                quizContainer.classList.add('wrong-flash');
+                quizContainer.classList.remove('correct-flash');
+                // 标出正确答案
+                setTimeout(() => {
+                    allOptions.forEach(opt => {
+                        if (opt.dataset.answer === correctAnswer) {
+                            opt.classList.add('reveal-correct');
+                        }
+                    });
+                    quizContainer.classList.remove('wrong-flash');
+                }, 600);
+                // 答错也显示下一步按钮（稍晚一点）
+                setTimeout(() => {
+                    document.getElementById('twNextBtn').style.display = 'inline-block';
+                    document.getElementById('twNextBtn').scrollIntoView({ behavior: 'smooth' });
+                }, 1200);
+            }
+        }
+
+        // ============ 第4页：绳金塔 ============
+        function shakePagoda() {
+            if (state.sjtShaken) return;
+
+            state.sjtShaken = true;
+            state.allTreasures.push('🗼祈福签');
+
+            const pagoda = document.getElementById('pagodaEl');
+            if (!pagoda) return;
+
+            let shakes = 0;
+            const maxShakes = 6;
+            // 清除之前的定时器
+            if (state.pagodaShakeTimer) clearInterval(state.pagodaShakeTimer);
+
+            state.pagodaShakeTimer = setInterval(() => {
+                const offset = (shakes % 2 === 0 ? 6 : -6) * (1 - shakes / maxShakes);
+                pagoda.style.transform = `translateX(${offset}px)`;
+                shakes++;
+                if (shakes >= maxShakes) {
+                    clearInterval(state.pagodaShakeTimer);
+                    state.pagodaShakeTimer = null;
+                    pagoda.style.transform = 'translateX(0)';
+                    document.getElementById('pagodaResult').textContent = '🙏 祈福成功！获得"平安喜乐"祈福签';
+                    document.getElementById('sjtNextBtn').style.display = 'inline-block';
+                    document.getElementById('sjtNextBtn').scrollIntoView({ behavior: 'smooth' });
+                    showToast('🙏 获得祈福签！', 'success');
+                }
+            }, 80);
+        }
+
+        // ============ 第5页：八一广场 ============
+        function collectStar(el) {
+            if (el.classList.contains('collected')) return;
+            if (state.byCompleted) return;
+
+            el.classList.add('collected');
+            state.starsCollected++;
+            state.allTreasures.push('⭐红色星光');
+            document.getElementById('starCounter').textContent = '收集星光：' + state.starsCollected + ' / 5';
+
+            showToast('⭐ 收集到星光！', 'success');
+
+            if (state.starsCollected >= state.starsTotal) {
+                state.byCompleted = true;
+                setTimeout(() => {
+                    document.getElementById('starCounter').textContent = '✨ 星光全部收集！英雄城精神永存！';
+                    document.getElementById('byNextBtn').style.display = 'inline-block';
+                    document.getElementById('byNextBtn').scrollIntoView({ behavior: 'smooth' });
+                }, 400);
+            }
+        }
+
+        // ============ 第6页：南昌美食 ============
+        function addTopping(btn) {
+            if (btn.classList.contains('added')) return;
+            if (state.foodCompleted) return;
+
+            btn.classList.add('added');
+            state.toppingsAdded++;
+            state.allTreasures.push('🍜拌粉配料:' + btn.dataset.topping);
+
+            const bowl = document.getElementById('foodBowl');
+            const emojis = ['🍜', '🍲', '🥘', '🍝', '✨🍜✨'];
+            bowl.textContent = emojis[Math.min(state.toppingsAdded, 4)];
+
+            const addedNames = [];
+            document.querySelectorAll('.topping-btn.added').forEach(b => addedNames.push(b.dataset.topping));
+            document.getElementById('foodResult').textContent = '✅ 已添加：' + addedNames.join('、');
+
+            showToast('👨‍🍳 加入' + btn.dataset.topping + '！', 'success');
+
+            if (state.toppingsAdded >= state.toppingsTotal) {
+                state.foodCompleted = true;
+                setTimeout(() => {
+                    bowl.textContent = '✨🍜✨';
+                    document.getElementById('foodResult').textContent = '🎉 地道南昌拌粉完成！香气扑鼻~';
+                    document.getElementById('foodNextBtn').style.display = 'inline-block';
+                    document.getElementById('foodNextBtn').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
+        }
+
+        // ============ 第7页：南昌之星摩天轮 ============
+        function initFerrisStars() {
+            const container = document.getElementById('ferrisStarsBg');
+            if (!container) return;
+            if (container.children.length > 0) return;
+            for (let i = 0; i < 35; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'star-dot';
+                dot.style.left = Math.random() * 94 + '%';
+                dot.style.top = Math.random() * 90 + '%';
+                dot.style.animationDelay = Math.random() * 3 + 's';
+                dot.style.animationDuration = (1.5 + Math.random() * 3) + 's';
+                container.appendChild(dot);
+            }
+            const wheel = document.getElementById('ferrisWheel');
+            if (wheel && wheel.querySelectorAll('.ferris-spoke').length === 0) {
+                for (let i = 0; i < 12; i++) {
+                    const spoke = document.createElement('div');
+                    spoke.className = 'ferris-spoke';
+                    spoke.style.transform = `translate(-50%, -100%) rotate(${i * 30}deg)`;
+                    const cabin = document.createElement('div');
+                    cabin.className = 'ferris-cabin';
+                    spoke.appendChild(cabin);
+                    wheel.appendChild(spoke);
+                }
+            }
+        }
+
+        function collectFerrisLight() {
+            if (state.ferrisCompleted) return;
+            state.ferrisLights++;
+            state.allTreasures.push('🎡摩天轮星光');
+            document.getElementById('ferrisCounter').textContent = '星光能量：' + state.ferrisLights + ' / 6';
+
+            const wheel = document.getElementById('ferrisWheel');
+            if (wheel) {
+                wheel.style.boxShadow =
+                    `0 0 ${30 + state.ferrisLights * 15}px rgba(100,180,255,${0.3 + state.ferrisLights * 0.1})`;
+            }
+            showToast('✨ 收集到星光能量！', 'success');
+
+            if (state.ferrisLights >= state.ferrisTotal) {
+                state.ferrisCompleted = true;
+                if (wheel) wheel.classList.add('paused');
+                document.getElementById('ferrisHint').textContent = '🌟 摩天轮星光璀璨！';
+                document.getElementById('ferrisCounter').textContent = '🌟 星光能量满格！南昌之星闪耀夜空！';
+                document.getElementById('starNextBtn').style.display = 'inline-block';
+                document.getElementById('starNextBtn').scrollIntoView({ behavior: 'smooth' });
+                showToast('🌟 南昌之星点亮！', 'success');
+            }
+        }
+
+        // ============ 第8页：宝藏汇总 ============
+        function buildFinalTreasureList() {
+            const list = document.getElementById('finalTreasureList');
+            if (!list) return;
+            if (list.children.length > 0) return;
+
+            const unique = [...new Set(state.allTreasures)];
+            const display = unique.slice(0, 7);
+            if (display.length === 0) display.push('🪙 基础宝藏');
+
+            display.forEach(t => {
+                const item = document.createElement('span');
+                item.className = 'treasure-item';
+                item.textContent = t;
+                list.appendChild(item);
+            });
+
+            const badge = document.getElementById('finalBadge');
+            if (!badge) return;
+            if (state.twCompleted && state.twQuizCorrect && state.ferrisCompleted && state.foodCompleted) {
+                badge.textContent = '🏅 南昌文化大师';
+            } else if (state.allTreasures.length >= 6) {
+                badge.textContent = '🏅 南昌文化达人';
+            } else if (state.allTreasures.length >= 3) {
+                badge.textContent = '🎖️ 南昌文化探索者';
+            } else {
+                badge.textContent = '🔰 南昌文化初学者';
+            }
+        }
+
+        function restartJourney() {
+            // 清理定时器
+            if (state.pagodaShakeTimer) {
+                clearInterval(state.pagodaShakeTimer);
+                state.pagodaShakeTimer = null;
+            }
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+                toastTimeout = null;
+            }
+
+            // 重置所有状态
+            state.currentPage = 0;
+            state.isTransitioning = false;
+            state.twTreasuresFound = 0;
+            state.twCompleted = false;
+            state.twQuizAnswered = false;
+            state.twQuizCorrect = false;
+            state.sjtShaken = false;
+            state.starsCollected = 0;
+            state.byCompleted = false;
+            state.toppingsAdded = 0;
+            state.foodCompleted = false;
+            state.ferrisLights = 0;
+            state.ferrisCompleted = false;
+            state.allTreasures = [];
+
+            // 重置UI - 滕王阁
+            document.querySelectorAll('#gameSceneTW .hidden-treasure').forEach(el => el.classList.remove('found'));
+            ['twDot1', 'twDot2', 'twDot3'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('collected');
+            });
+            document.getElementById('twCount').textContent = '0/3';
+            document.getElementById('twHint').textContent = '👆 在滕王阁画面中仔细寻找闪烁的宝物吧~';
+            document.getElementById('twNextBtn').style.display = 'none';
+            const twQuiz = document.getElementById('twQuiz');
+            twQuiz.classList.remove('visible', 'correct-flash', 'wrong-flash');
+            document.getElementById('twQuizFeedback').textContent = '';
+            document.getElementById('twQuizFeedback').className = 'quiz-feedback';
+            document.querySelectorAll('#twQuizOptions .quiz-option').forEach(opt => {
+                opt.classList.remove('selected-correct', 'selected-wrong', 'reveal-correct');
+                opt.style.pointerEvents = 'auto';
+            });
+
+            // 绳金塔
+            document.getElementById('pagodaResult').textContent = '👆 轻点古塔，诚心祈福';
+            document.getElementById('sjtNextBtn').style.display = 'none';
+            const pagoda = document.getElementById('pagodaEl');
+            if (pagoda) pagoda.style.transform = 'translateX(0)';
+
+            // 八一广场
+            document.querySelectorAll('.star-collectible').forEach(el => el.classList.remove('collected'));
+            document.getElementById('starCounter').textContent = '收集星光：0 / 5';
+            document.getElementById('byNextBtn').style.display = 'none';
+
+            // 美食
+            document.querySelectorAll('.topping-btn').forEach(el => el.classList.remove('added'));
+            document.getElementById('foodBowl').textContent = '🍜';
+            document.getElementById('foodResult').textContent = '👆 点击配料，调制你的拌粉';
+            document.getElementById('foodNextBtn').style.display = 'none';
+
+            // 南昌之星
+            document.getElementById('ferrisCounter').textContent = '星光能量：0 / 6';
+            document.getElementById('ferrisHint').textContent = '👆 点击摩天轮收集星光';
+            document.getElementById('starNextBtn').style.display = 'none';
+            const wheel = document.getElementById('ferrisWheel');
+            if (wheel) {
+                wheel.classList.remove('paused');
+                wheel.style.boxShadow = '0 0 40px rgba(100,180,255,0.25)';
+            }
+
+            // 宝藏页
+            document.getElementById('finalTreasureList').innerHTML = '';
+
+            // 隐藏toast
+            const toast = document.getElementById('toast');
+            toast.classList.remove('show');
+
+            // 切换回封面页
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'exit-up'));
+            const coverScreen = document.getElementById('screen-cover');
+            if (coverScreen) {
+                coverScreen.classList.add('active');
+                coverScreen.scrollTop = 0;
+            }
+            updatePageIndicator();
+        }
+
+        // ============ 初始化 ============
+        function init() {
+            updatePageIndicator();
+            document.querySelectorAll('.screen').forEach(s => {
+                if (!s.classList.contains('active') && s.dataset.page !== '0') {
+                    s.classList.remove('active');
+                }
+            });
+            const coverScreen = document.getElementById('screen-cover');
+            if (coverScreen) coverScreen.classList.add('active');
+            state.currentPage = 0;
+            state.isTransitioning = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        // 防止意外滚动传播
+        document.getElementById('app').addEventListener('touchmove', function(e) {
+            const target = e.target.closest('.screen');
+            if (target && target.scrollHeight > target.clientHeight + 10) {
+                return;
+            }
+        }, { passive: true });
+
+        console.log('🏯 福地寻宝·南昌文化探秘 H5 已就绪');
+        console.log('   📍 8个探索页面 | 🎮 5个互动游戏 | 📜 1道文化选择题 | 🌟 南昌文化之旅');
+        console.log('   🏯 滕王阁寻宝+问答 | 🗼 绳金塔祈福 | ⭐ 八一广场 | 🍜 南昌拌粉 | 🎡 南昌之星');
+    </script>
+</body>
+</html>
